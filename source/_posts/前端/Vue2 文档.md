@@ -1,9 +1,11 @@
 ---
 title: Vue2 文档
 date: 2020-07-15
-categories: [前端, vue]
+categories: 
+  - [前端, Vue]
+  - [文档]
 tags:
-  - 文档
+  - Vue
 ---
 
 ## 1. 父子组件传值

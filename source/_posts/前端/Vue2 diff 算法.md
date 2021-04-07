@@ -3,7 +3,7 @@ title: Vue2 diff 算法
 date: 2020-07-20
 categories: [前端, vue]
 tags:
-  - diff 算法
+  - Diff 算法
 ---
 
 ## 结构图

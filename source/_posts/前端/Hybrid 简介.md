@@ -1,9 +1,9 @@
 ---
 title: Hybrid 简介
 date: 2020-07-17
-categories: [前端, js]
+categories: [前端, JavaScript]
 tags:
-  - hybrid
+  - 技术实践
 ---
 
 ## hybrid 实现原理

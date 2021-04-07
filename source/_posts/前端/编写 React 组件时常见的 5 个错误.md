@@ -1,9 +1,9 @@
 ---
 title: 编写 React 组件时常见的 5 个错误
 date: 2021-03-01
-categories: [前端, react]
+categories: [前端, React]
 tags: 
-  - react
+  - React-Hooks
 ---
 
 ## 1. 在不需要重渲染时使用 useState

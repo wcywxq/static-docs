@@ -3,7 +3,7 @@ title: Vue2 虚拟 dom
 date: 2020-07-18
 categories: [前端, vue]
 tags:
-  - 虚拟 dom
+  - 虚拟 Dom
 ---
 
 ## 关键点

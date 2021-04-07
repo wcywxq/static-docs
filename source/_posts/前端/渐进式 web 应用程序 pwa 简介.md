@@ -1,9 +1,9 @@
 ---
 title: 渐进式 web 应用程序 pwa 简介
 date: 2020-07-16
-categories: [前端, js]
+categories: [前端, JavaScript]
 tags: 
-  - pwa
+  - 技术实践
 ---
 
 介绍

@@ -1,7 +1,7 @@
 ---
 title: Chrome 调试技巧
 date: 2020-10-15
-categories: [前端, js]
+categories: [前端, JavaScript]
 tags: 
   - 使用技巧
 ---

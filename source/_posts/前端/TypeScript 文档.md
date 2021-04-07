@@ -1,9 +1,11 @@
 ---
 title: TypeScript 文档
 date: 2020-09-10
-categories: [前端, ts]
+categories: 
+  - [前端, TypeScript]
+  - [文档]
 tags:
-  - 文档
+  - TypeScript
 ---
 
 ## 一、 基础类型

@@ -1,10 +1,9 @@
 ---
 title: 网络请求 ajax 和 fetch
 date: 2020-07-13
-categories: [前端, js]
+categories: [前端, JavaScript]
 tags:
-  - ajax
-  - fetch
+  - 技术点
 ---
 
 ## 1. ajax

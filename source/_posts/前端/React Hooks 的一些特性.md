@@ -1,9 +1,9 @@
 ---
 title: React Hooks 的一些特性
 date: 2020-08-16
-categories: [前端, react]
+categories: [前端, React]
 tags:
-  - react-hooks
+  - React-Hooks
 ---
 
 ## 1. 逆潮而动

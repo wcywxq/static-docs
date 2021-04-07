@@ -1,7 +1,7 @@
 ---
 title: 从图片裁剪了解 js 二进制常用 api
 date: 2020-11-20
-categories: [前端, js]
+categories: [前端, JavaScript]
 tags: 
   - 二进制
 ---

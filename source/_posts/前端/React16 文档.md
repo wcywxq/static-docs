@@ -1,9 +1,11 @@
 ---
 title: React16 文档
 date: 2020-08-15
-categories: [前端, react]
+categories: 
+  - [前端, React]
+  - [文档]
 tags:
-  - 文档
+  - React
 ---
 
 ## 1. React 中的核心概念
