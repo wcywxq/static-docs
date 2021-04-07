@@ -102,4 +102,7 @@ theme: stellar
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: git
+  repo: https://github.com/conjuringwxq/conjuringwxq.github.io.git
+  branch: master # 默认 gh-pagees
+  # message: [message] # 自定义提交信息
