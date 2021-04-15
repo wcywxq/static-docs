@@ -1,7 +1,7 @@
 ---
 title: Attr 函数
 date: 2020-05-17
-categories: [Css]
+categories: [Css3]
 ---
 
 > CSS 表达式 `attr()` 用来获取选择到的元素的某一 HTML 属性值，并用于其样式。它也可以用于伪元素，属性值采用伪元素所依附的元素。
