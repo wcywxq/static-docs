@@ -1,7 +1,7 @@
 ---
 title: Vue2 文档
 date: 2020-07-15
-categories: [知识点, 前端, Vue]
+categories: [知识点, Vue]
 tags:
   - 文档
 ---

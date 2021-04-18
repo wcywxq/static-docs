@@ -1,7 +1,7 @@
 ---
 title: Vue2 数据驱动
 date: 2020-07-21
-categories: [知识点, 前端, vue]
+categories: [知识点, Vue]
 tags:
   - 数据驱动
 ---

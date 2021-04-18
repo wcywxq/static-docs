@@ -1,7 +1,7 @@
 ---
 title: Vue2 diff 算法
 date: 2020-07-20
-categories: [知识点, 前端, vue]
+categories: [知识点, Vue]
 tags:
   - Diff 算法
 ---

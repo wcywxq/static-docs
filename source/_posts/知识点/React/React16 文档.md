@@ -1,7 +1,7 @@
 ---
 title: React16 文档
 date: 2020-08-15
-categories: [知识点, 前端, React]
+categories: [知识点, React]
 tags:
   - 文档
 ---

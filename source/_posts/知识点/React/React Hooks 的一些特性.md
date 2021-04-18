@@ -1,7 +1,7 @@
 ---
 title: React Hooks 的一些特性
 date: 2020-08-16
-categories: [知识点, 前端, React]
+categories: [知识点, React]
 tags:
   - React-Hooks
 ---
