@@ -1,7 +1,7 @@
 ---
 title: React 面试精选
 date: 2021-04-19
-categories: [知识点, 面试, React]
+categories: [面试, React]
 ---
 
 ## 什么是 jsx? (jsx 的本质是什么)
