@@ -1,7 +1,7 @@
 ---
 title: Loader 和 plugin
 date: 2021-04-18
-categories: [知识点, Webpack]
+categories: [面试, Webpack]
 ---
 
 ## 常见的 Loader

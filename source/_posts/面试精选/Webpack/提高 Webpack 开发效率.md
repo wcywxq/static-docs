@@ -1,7 +1,7 @@
 ---
 title: 提高 Webpack 开发效率
 date: 2021-04-18
-categories: [知识点, Webpack]
+categories: [面试, Webpack]
 ---
 
 ## 提高效率的一些插件

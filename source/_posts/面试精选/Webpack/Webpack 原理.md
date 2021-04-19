@@ -1,7 +1,7 @@
 ---
 title: Webpack 原理
 date: 2021-04-18
-categories: [知识点, Webpack]
+categories: [面试, Webpack]
 ---
 
 ## Webpack 的构建流程
