@@ -57,7 +57,7 @@ relative_link: false
 # future: false
 future: true
 highlight:
-  enable: true
+  enable: false
   line_number: false
   auto_detect: false
   tab_replace: '    '

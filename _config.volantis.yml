@@ -5,7 +5,7 @@ navbar:
     # img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png
     img: false
     icon:
-    title: 'conjuring'
+    title: "conjuring"
   menu:
     # The following can be written in `blog/source/_data/menu.yml`
     - name: 首页
@@ -35,7 +35,7 @@ navbar:
 
 cover:
   height_scheme: half # full, half
-  title: 'conjuring'
+  title: "conjuring"
   background: https://bing.ioliu.cn/v1/rand?w=1920&h=1200
   features: false
 
@@ -58,7 +58,7 @@ article:
         name: conjuringwxq
         url: https://github.com/conjuringwxq/
       updated:
-        title: '本页文档最后更新于：'
+        title: "本页文档最后更新于："
 
 comments:
   service: gitalk
@@ -126,7 +126,6 @@ sidebar:
     #       url: https://github.com/volantis-x/hexo-theme-volantis/releases/
     #       rel: external nofollow noopener noreferrer
     #       target: _blank
-
     # qrcode widget
     # qrcode:
     #   class: qrcode
@@ -138,7 +137,6 @@ sidebar:
     #   fancybox: #true
     #   images:
     #     - https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png
-
     # help:
     #   class: page
     #   display: [desktop, mobile]
@@ -147,7 +145,6 @@ sidebar:
     #     title: 帮助
     #   pid: faq
     #   content: excerpt # excerpt, more, content
-
     # news:
     #   class: list
     #   display: [desktop, mobile] # [desktop, mobile]
@@ -161,35 +158,30 @@ sidebar:
     #     - name: 升级小助手
     #       icon: fas fa-angle-double-up
     #       url: /v3/getting-started/#升级小助手
-
     # docs-v2:
     #   class: group
     #   display: [desktop, mobile] # [desktop, mobile]
     #   header:
     #     icon: fad fa-list-alt
     #     title: 文档导航 v2
-
     # docs-v3:
     #   class: group
     #   display: [desktop, mobile] # [desktop, mobile]
     #   header:
     #     icon: fad fa-list-alt
     #     title: 文档导航 v3
-
     # docs-v4:
     #   class: group
     #   display: [desktop, mobile] # [desktop, mobile]
     #   header:
     #     icon: fad fa-list-alt
     #     title: 文档导航 v4
-
     # docs-latest:
     #   class: group
     #   display: [desktop, mobile] # [desktop, mobile]
     #   header:
     #     icon: fad fa-book
     #     title: 文档导航 v5.0
-
     # docs-volantis-latest:
     #   class: group
     #   display: [desktop, mobile] # [desktop, mobile]
@@ -199,29 +191,33 @@ sidebar:
     #     title: 文档导航 v5.0
 
 # site_footer:
-  # layout: [aplayer, social, source, analytics, copyright]
-  # copyright: '[Copyright © 2017-2021 Volantis Team](https://github.com/volantis-x/)'
-  # social:
-  #   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/020-rss.svg
-  #     url: atom.xml
-  #   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/029-github.svg
-  #     url: https://github.com/volantis-x/
-  #   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/010-facebook.svg
-  #     url: /
-  #   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/018-twitter.svg
-  #     url: /
-  #   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/045-telegram.svg
-  #     url: /
-  #   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/006-youtube.svg
-  #     url: /
-
+# layout: [aplayer, social, source, analytics, copyright]
+# copyright: '[Copyright © 2017-2021 Volantis Team](https://github.com/volantis-x/)'
+# social:
+#   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/020-rss.svg
+#     url: atom.xml
+#   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/029-github.svg
+#     url: https://github.com/volantis-x/
+#   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/010-facebook.svg
+#     url: /
+#   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/018-twitter.svg
+#     url: /
+#   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/045-telegram.svg
+#     url: /
+#   - img: https://cdn.jsdelivr.net/gh/volantis-x/cdn-org@1.1/icon/1322024-social-media/006-youtube.svg
+#     url: /
 
 # tag_plugins:
 #   # {% note text %}
 #   note: # style for default note:
 #     iconfont: 'Font Awesome 5 Pro'
 
-# plugins:
+plugins:
+  highlightjs:
+    enable: #true # Please set hexo.config.highlight.enable = false !!!
+    js: https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9/build/highlight.min.js
+    css: https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9/build/styles/atom-one-dark.min.css
+    # more: https://www.jsdelivr.com/package/npm/highlight.js?path=styles
 #   clipboard:
 #     enable: true
 #   fontawesome: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fontawesome-pro@master/css/all.min.css
@@ -268,9 +264,9 @@ custom_css:
   #   effect: [shadow] # [shadow, floatable, blur]
   body:
     # effect: [shadow] # [shadow, floatable, blur]
-    highlight:
-      language: true # show language of codeblock
-      copy_btn: true
+    # highlight:
+    #   language: true # show language of codeblock
+    #   copy_btn: true
     text_align: # left, right, justify, center
       h1: left
       h2: left
@@ -279,7 +275,7 @@ custom_css:
       p: justify
     note: # style for default note: {% note text %}
       icon: '\f054'
-      color: ''
+      color: ""
   fontfamily:
     # logofont:
     #   fontfamily: 'Dosis, "PingFang SC", "Microsoft YaHei", Helvetica, Arial'
@@ -288,14 +284,14 @@ custom_css:
     #   weight: normal
     #   style: normal
     bodyfont:
-      fontfamily: 'Hack'
-      name: 'Hack'
+      fontfamily: "Hack"
+      name: "Hack"
       # url: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fonts@20.5.30/Dosis/Dosis-Medium.ttf
       weight: normal
       style: normal
     codefont:
-      fontfamily: 'Hack'
-      name: 'Hack'
+      fontfamily: "Hack"
+      name: "Hack"
       # url: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fonts/Monaco/Monaco.ttf
       weight: normal
       style: normal
@@ -308,6 +304,9 @@ custom_css:
     zoom-out: https://cdn.jsdelivr.net/gh/inkss/common@master/cursor/zoom-out.png
     zoom-in: https://cdn.jsdelivr.net/gh/inkss/common@master/cursor/zoom-in.png
     grab: https://cdn.jsdelivr.net/gh/inkss/common@master/cursor/openhand.png
+
+color_scheme: 
+  enable: false
 
 rightmenu:
   enable: true
