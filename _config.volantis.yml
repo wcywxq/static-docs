@@ -83,7 +83,7 @@ sidebar:
       header:
         icon: fas fa-list
         title: 本文目录
-      list_number: true
+      list_number: false
       min_depth: 2
       max_depth: 5
     # post:
@@ -219,8 +219,10 @@ plugins:
     js: https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10/build/highlight.min.js
     css: https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10/build/styles/atom-one-dark.min.css
     # more: https://www.jsdelivr.com/package/npm/highlight.js?path=styles
-#   clipboard:
-#     enable: true
+  # Codeblock Copy Button
+  clipboard:
+    enable: true
+    js: https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js
 #   fontawesome: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fontawesome-pro@master/css/all.min.css
 #   backstretch:
 #     enable: false
@@ -279,12 +281,6 @@ custom_css:
       icon: '\f054'
       color: ""
   fontfamily:
-    # logofont:
-    #   fontfamily: 'Dosis, "PingFang SC", "Microsoft YaHei", Helvetica, Arial'
-    #   name: 'Dosis'
-    #   url: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fonts@20.5.30/Dosis/Dosis-Medium.ttf
-    #   weight: normal
-    #   style: normal
     bodyfont:
       fontfamily: "Monaco"
       name: "Monaco"
