@@ -60,8 +60,8 @@ article:
       updated:
         title: "本页文档最后更新于："
 
-comments:
-  service: gitalk
+# comments:
+  # service: gitalk
 #   disqus:
 #     shortname: volantis
 #     path: /
@@ -213,10 +213,11 @@ sidebar:
 #     iconfont: 'Font Awesome 5 Pro'
 
 plugins:
+  # highlight.js
   highlightjs:
-    enable: #true # Please set hexo.config.highlight.enable = false !!!
-    js: https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9/build/highlight.min.js
-    css: https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9/build/styles/atom-one-dark.min.css
+    enable: true # Please set hexo.config.highlight.enable = false !!!
+    js: https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10/build/highlight.min.js
+    css: https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10/build/styles/atom-one-dark.min.css
     # more: https://www.jsdelivr.com/package/npm/highlight.js?path=styles
 #   clipboard:
 #     enable: true
@@ -264,9 +265,10 @@ custom_css:
   #   effect: [shadow] # [shadow, floatable, blur]
   body:
     # effect: [shadow] # [shadow, floatable, blur]
-    # highlight:
-    #   language: true # show language of codeblock
-    #   copy_btn: true
+    highlight:
+      language: true # show language of codeblock
+      copy_btn: true
+      grayscale: false # Enable grayscale effect
     text_align: # left, right, justify, center
       h1: left
       h2: left
@@ -284,15 +286,15 @@ custom_css:
     #   weight: normal
     #   style: normal
     bodyfont:
-      fontfamily: "Hack"
-      name: "Hack"
-      # url: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fonts@20.5.30/Dosis/Dosis-Medium.ttf
+      fontfamily: "Monaco"
+      name: "Monaco"
+      url: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fonts/Monaco/Monaco.ttf
       weight: normal
       style: normal
     codefont:
-      fontfamily: "Hack"
-      name: "Hack"
-      # url: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fonts/Monaco/Monaco.ttf
+      fontfamily: "Monaco"
+      name: "Monaco"
+      url: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fonts/Monaco/Monaco.ttf
       weight: normal
       style: normal
   cursor:
@@ -304,9 +306,6 @@ custom_css:
     zoom-out: https://cdn.jsdelivr.net/gh/inkss/common@master/cursor/zoom-out.png
     zoom-in: https://cdn.jsdelivr.net/gh/inkss/common@master/cursor/zoom-in.png
     grab: https://cdn.jsdelivr.net/gh/inkss/common@master/cursor/openhand.png
-
-color_scheme: 
-  enable: false
 
 rightmenu:
   enable: true
