@@ -357,3 +357,9 @@ Fiber 就是通过对象记录组件上需要做或者已经完成的更新，�
 1. 首先，用户通过 View 发出 Action，发出方式用到了 dispatch 方法
 2. Store 调用 Reducer, 传入两个参数: 当前 State 和收到的 Action，Reducer 会返回新的 State
 3. State ⼀旦有变化，Store 就会调⽤监听函数，来更新 View
+
+## mobx
+
+### mobx 的工作流程
+
+![mobx工作流程图](/images/mobx流程.png)
