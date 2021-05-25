@@ -152,11 +152,26 @@ react 根据 w3c 规范定义了每个事件处理函数的参数，即合成事
 2. react 会对这种引用做缓存，从而优化 cpu 和 内存
 3. 在使用 类组件或函数组件时，需手动实现 this 绑定
 
-## react 和 原生事件的执行顺序是什么? 可以混用么？
+### react 和 原生事件的执行顺序
 
-react 所有事件都通过 document 来分发，当真实 dom 触发事件后冒泡到 document 后才会对 react 事件进行处理。
+1. 原生事件，依次冒泡执行
 
-所以原生事件先执行，然后执行 react 合成事件，最后执行真正在 document 上挂载的事件
+2. react 合成事件，依次冒泡执行
+
+3. document 上挂载的事件执行
+
+```js
+/*
+ * 执行结果：
+ * 1. dom child
+ * 2. dom parent
+ * 3. react child
+ * 4. react parent
+ * 5. dom document
+ * */
+```
+
+### react 事件与原生事件可以混用么
 
 React 事件和原生事件最好不要混用。原生事件中如果执行了 stopPropagation 方法，则会导致其他 React 事件失效。因为所有元素的事件将无法冒泡到 document 上，导致所有的 React 事件都将无法被触发
 
@@ -245,17 +260,34 @@ HOC 在业务中的实际应用场景：
 - 双向绑定
 - 表单校验
 
-## 使用 react hooks 好处是什么
+## react hooks
+
+### 使用 react hooks 好处是什么
 
 hooks 通常支持提取和重用跨多个组件通用的有状态逻辑，而无需承担高阶组件或渲染 props 的负担。hooks 可以轻松地操作函数组件的状态，而不需要将它们转换为类组件
 
 Hooks 在类中不起作用，通过使用它们，咱们可以完全避免使用生命周期方法，例如 componentDidMount、componentDidUpdate、componentWillUnmount。相反，使用像 useEffect 这样的内置钩子。
 
-## react hooks 如何保存状态
+### react hooks 如何保存状态
 
 - react hooks 和 类组件的状态值都被挂载在组件实例对象 FiberNode 的 memoizedState 属性中
 - react hooks 和 类组件的数据结构完全不同。类组件是直接把 state 属性中挂载的这个开发者自定义的对象给保存到 memoizedState 属性中；而 React Hooks 是用链表来保存状态的，memoizedState 属性保存的实际上是这个链表的头指针。
 - 所有的 hooks 都以链表的形式挂载在 FiberNode.updateQueue 中
+
+### react hooks 常用 api
+
+- 基础 hooks
+
+  1. useState: 状态钩子，为函数组件提供内部状态
+  2. useEffect: 副作用钩子，提供了类似于 componentDidMount 等生命周期钩子的功能
+  3. useContext: 共享钩子，在组件之间共享状态，可以解决 react 逐层通过 props 传递数据
+
+- 额外的 hooks
+  1. useReducer: action 钩子，提供了状态管理，其基本原理是通过用户在页面上发起的 action，从而通过 reduce 方法来改变 state，从而实现页面和状态的通信，使用很像 redux
+  2. useCallBack: 把内联回调函数及依赖项数组作为参数传入 useCallback, 它将返回该回调函数的 memoized 版本, 该回调函数仅在某个依赖项改变时才会更新
+  3. useMemo: 把创建函数和依赖项数组作为参数传入 useMemo, 它仅会在某个依赖项改变时重新计算, 可以作为性能优化的手段。
+  4. useRef: 获取组件的实例，返回一个可变的 ref 对象, 返回的 ref 对象在组件的整个生命周期内保持不变
+  5. useLayoutEffect: 它会在所有 DOM 变更后同步调用 effect
 
 ## react fiber
 
@@ -323,6 +355,22 @@ fiber 是个链表，有 child 和 sibing 属性，指向第一个子节点和�
 - setState 只在合成事件和钩⼦函数中是 "异步" 的，在 原⽣事件 和 setTimeout 中都是同步的
 - setState 的 "异步" 并不是说内部由异步代码实现，其实本身执⾏的过程和代码都是同步的，只是 合成事件 和 钩⼦函数 的 调⽤顺序在更新之前，导致在合成事件和钩⼦函数中没法⽴⻢拿到更新后的值，形成了所谓的 "异步"，当然可以通过第⼆个参数 setState(partialState, callback)中的 callback 拿到更新后的结果
 - setState 的批量更新优化也是建⽴在 "异步"（合成事件、钩⼦函数）之上的，在 原⽣事件 和 setTimeout 中不会批量更新，在 "异步" 中如果对同⼀个值进⾏多次 setState，setState 的批量更新策略会对其进⾏覆盖，取最后⼀次的执⾏，如果是同时 setState 多个不同的值，在更新时会对其进⾏合并批量更新。
+
+### 为什么 setState 不设计成同步的
+
+- 保持内部的一致性和状态的安全性
+
+state, props, refs 一致性
+
+- 性能优化
+
+react 会对依据不同的调用源，给不同的 setState 调用分配不同的优先级
+
+调用源包括：事件处理、网络请求、动画
+
+- 更多可能性
+
+异步获取数据后，统一渲染页面, 保持一致性
 
 ## redux
 
