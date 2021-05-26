@@ -132,7 +132,7 @@ Compilation 模块会被 Compiler 用来创建新的 compilation 对象(或新�
 
 ### webpack plugin 执行顺序
 
->
+> 按照编译顺序执行
 
 ### 编写 Plugin 的步骤
 
