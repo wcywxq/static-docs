@@ -123,6 +123,7 @@ Compilation 模块会被 Compiler 用来创建新的 compilation 对象(或新�
 - clean-webpack-plugin: 目录清理
 - webpack-bundle-analyze: 可视化分析包大小体积
 - compression-webpack-plugin: 开启 gzip 压缩
+- terser-webpack-plugin: 使用多进程并行压缩代码, 需设置 `parallel: true`
 - DefinePlugin: 编译时配置全局变量, 对开发模式和生产模式的构建允许不同的行为非常有用(可配合 .env 使用)
 - HotModuleReplacementPlugin: 热更新
 - DllPlugin: 拆分捆绑包以大幅缩短构建时间, 用于抽离第三方模块，常用于对静态不变的第三方库进行处理
