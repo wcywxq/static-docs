@@ -54,18 +54,31 @@ Webpack 的运行流程是一个串行的流程，从启动到结束会依次执
 - 编译: 从 Entry(入口文件) 出发，针对每个 Module 串型调用对应的 Loader 去翻译文件的内容，再找到该 Module 依赖的 Module，递归的进行编译处理
 - 输出: 将编译后的 Module 组合成 Chunk, 将 Chunk 转换成文件, 输出到文件系统中
 
-## webpack 常用 loader
+## loader
+
+### webpack 常用 loader
 
 - raw-loader: 加载文件原始内容（utf-8）
 - file-loader: 把文件输出到一个文件夹中，在代码中通过相对 URL 去引用输出的文件
 - url-loader: 和 file-loader 类似, 区别是用可以设置一个阀值，大于阈值会交给 file-loader 处理，小于阈值时返回文件 base64 形式编码 (处理图片和字体)
+
+> 在 webpack 5，通过添加 4 种新的模块类型，来替换所有这些 loader
+>
+> 1. asset/resource 替换 file-loader
+> 2. asset/inline 替换 url-loader
+> 3. asset/source 替换 raw-loader
+>
+> 在 webpack 5 中，可通过设置 `type: "javascript/auto"` 来使用旧的 assets loader
+
 - svg-inline-loader: 将压缩后的 svg 内容注入到代码中
 - source-map-loader: 加载额外的 source map 文件，以方便断点调试
 - image-loader: 加载并且压缩图片文件
 - babel-loader: 把 es6 转换成 es5
 - css-loader: 加载 css, 支持模块化、压缩、文件导入等特性
 - style-loader: 把 CSS 代码注入到 JavaScript 中，通过 DOM 操作去加载 CSS
+- MiniCssExtractPlugin.loader: 替换 style-loader, 用于将 JavaScript 中的 css 分离
 - postcss-loader: 扩展 CSS 语法，使用下一代 CSS，可以配合 autoprefixer 插件自动补齐 CSS3 前缀
+- source-map-loader: 从现有的源文件中提取 source maps
 - eslint-loader: 通过 ESLint 检查 JavaScript 代码
 - tslint-loader: 通过 TSLint 检查 TypeScript 代码
 - mocha-loader: 加载 Mocha 测试用例的代码
@@ -74,21 +87,61 @@ Webpack 的运行流程是一个串行的流程，从启动到结束会依次执
 - vue-loader: 加载 vue.js 单文件组件
 - cache-loader: 可以在一些性能开销较大的 Loader 之前添加，目的是将结果缓存到磁盘里
 
-## webpack 常用 plugin
+### webpack loader 执行顺序
+
+> 从下到上, 从右向左。因为使用了函数式编程的方式
+
+### 编写 loader 的注意点
+
+1. loader 支持链式调用, 因此开发过程中需严格遵守 `单一指责`, 即每个 loader 只负责自己需要处理的内容
+2. loader 运行在 node.js 中, 因此需导出一个函数, 参数是加载文件的原始 UTF-8 格式编码的字符串, 返回处理后的内容
+3. 如果要返回多个结果，可以使用 this.callback(err: Error | null, content: string | Buffer, sourceMap?: SourceMap, meta?: any)
+4. 在 loader 中, 异步操作需使用 this.async
+5. loader-utils 和 schema-utils 提供了一些方法可供给调用，用来获取一些信息，如参数
+
+## plugin
+
+### 介绍 webpack plugin
+
+webpack 插件是一个具有 apply 属性的 JavaScript 对象。apply 属性会被 webpack compiler 调用，并且 compiler 对象可在整个编译生命周期访问
+
+- compiler 实例
+
+Compiler 模块是 webpack 的支柱引擎，它通过 cli 或 node api 传递的所有选项，创建出一个 compilation 实例。它扩展 (extend) 自 Tapable 类，以便注册和调用插件。
+
+- compilation 钩子
+
+Compilation 模块会被 Compiler 用来创建新的 compilation 对象(或新的 build 对象)。compilation 实例能够访问所有的模块和它们的依赖(大部分是循环依赖)。它会对应用程序的依赖图中所有模块, 进行字面上的编译(literal compilation)。在编译阶段，模块会被加载(load)、封存(seal)、优化(optimize)、分块(chunk)、哈希(hash)和重新创建(restore)。
+
+### webpack 常用 plugin
 
 - webpack-bar: 自定义 webpack bar
 - html-webpack-plugin: 可根据模版自动生成 html 代码, 并自动引用 css 和 js 文件
 - mini-css-extract-plugin: 用于分割 css chunk 包
-- optimize-css-assets-webpack-plugin: 用于压缩 css 代码, 同时可对不同组件中重复的 css 代码去重
-- uglifyjs-webpack-plugin: 压缩 JavaScript
+- optimize-css-assets-webpack-plugin/css-minimizer-webpack-plugin: 用于压缩 css 代码, 同时可对不同组件中重复的 css 代码去重
+- uglifyjs-webpack-plugin/terser-webpack-plugin: 压缩 JavaScript
 - clean-webpack-plugin: 目录清理
 - webpack-bundle-analyze: 可视化分析包大小体积
 - compression-webpack-plugin: 开启 gzip 压缩
 - DefinePlugin: 编译时配置全局变量, 对开发模式和生产模式的构建允许不同的行为非常有用(可配合 .env 使用)
 - HotModuleReplacementPlugin: 热更新
-- DllPlugin: 用于抽离第三方模块，常用于对静态不变的第三方库进行处理
+- DllPlugin: 拆分捆绑包以大幅缩短构建时间, 用于抽离第三方模块，常用于对静态不变的第三方库进行处理
+- SplitChunksPlugin: 自动拆分 chunks, 公共资源拆分
+- SourceMapDevToolPlugin: 对 sourceMap 的更精细的配置
 
-## loader 和 plugin 的区别
+### webpack plugin 执行顺序
+
+>
+
+### 编写 Plugin 的步骤
+
+1. 创建一个 JavaScript 函数或 JavaScript 类。
+2. 在其原型上绑定 apply 方法
+3. 指定要利用的事件挂钩(hook)。
+4. 处理 webpack 内部实例特定的数据。
+5. 功能完成后，调用 webpack 提供的回调(callback)。
+
+## webpack loader 和 plugin 的区别
 
 loader 本质是一个函数, 接收一个参数, 参数是接收到的文件内容, 然后进行转换, 返回转换后的结果。本质起到了对非 JavaScript 类型资源的转译的预处理工作。
 
@@ -98,24 +151,7 @@ loader 在 module.rules 中配置, 作为模块的解析规则，是一个数组
 
 plugin 在 plugins 中单独配置, 类型为数组, 每一项都是一个 plugin 实例, 参数都通过构造函数传入
 
-## 编写 loader 的思路
-
-Loader 支持链式调用，所以开发上需要严格遵循“单一职责”，每个 Loader 只负责自己需要负责的事情。
-
-Loader 运行在 Node.js 中，我们可以调用任意 Node.js 自带的 API 或者安装第三方模块进行调用 Webpack 传给 Loader 的原内容都是 UTF-8 格式编码的字符串，当某些场景下 Loader 处理二进制文件时，需要通过 exports.raw = true 告诉 Webpack 该 Loader 是否需要二进制数据尽可能的异步化 Loader，如果计算量很小，同步也可以 Loader 是无状态的，我们不应该在 Loader 中保留状态使用 loader-utils 和 schema-utils 为我们提供的实用工具加载本地 Loader 方法
-
-Npm linkResolveLoader
-
-## 编写 Plugin 的思路
-
-webpack 在运行的生命周期中会广播出许多事件，Plugin 可以监听这些事件，在特定的阶段钩入想要添加的自定义功能。Webpack 的 Tapable 事件流机制保证了插件的有序性，使得整个系统扩展性良好。
-
-compiler(编译器) 暴露了和 Webpack 整个生命周期相关的钩子 compilation 暴露了与模块和依赖有关的粒度更小的事件钩子插件需要在其原型上绑定 apply 方法，才能访问 compiler(编译器) 实例传给每个插件的 compiler(编译器) 和 compilation(编译) 对象都是同一个引用，若在一个插件中修改了它们身上的属性，会影响后面的插件找出合适的事件点去完成想要的功能
-
-emit 事件发生时，可以读取到最终输出的资源、代码块、模块及其依赖，并进行修改(emit 事件是修改 Webpack 输出资源的最后时机)watch-run 当依赖的文件发生变化时会触发
-异步的事件需要在插件处理完任务时调用回调函数通知 Webpack 进入下一个流程，不然会卡住
-
-## Webpack 提高效率的插件
+### Webpack 提高效率的 plugin
 
 - webpack-dashboard: 更友好的展示相关的打包信息
 - webpack-merge: 提取公共配置，减少重复配置代码
