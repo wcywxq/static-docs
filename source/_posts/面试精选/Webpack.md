@@ -97,7 +97,7 @@ Webpack 的运行流程是一个串行的流程，从启动到结束会依次执
 2. loader 运行在 node.js 中, 因此需导出一个函数, 参数是加载文件的原始 UTF-8 格式编码的字符串, 返回处理后的内容
 3. 如果要返回多个结果，可以使用 this.callback(err: Error | null, content: string | Buffer, sourceMap?: SourceMap, meta?: any)
 4. 在 loader 中, 异步操作需使用 this.async
-5. loader-utils 和 schema-utils 提供了一些方法可供给调用，用来获取一些信息，如参数
+5. loader-utils 提供了 getOptions 方法用来获取参数信息; schema-utils 提供了 validate 方法用来做 JSON 模式验证
 
 ## plugin
 
