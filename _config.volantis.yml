@@ -280,7 +280,7 @@ custom_css:
     note: # style for default note: {% note text %}
       icon: '\f054'
       color: ""
-  fontfamily:
+  # fontfamily:
     # bodyfont:
     #   fontfamily: "sxls"
     #   name: "sxls"
