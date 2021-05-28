@@ -281,18 +281,18 @@ custom_css:
       icon: '\f054'
       color: ""
   fontfamily:
-    bodyfont:
-      fontfamily: "Monaco"
-      name: "Monaco"
-      url: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fonts/Monaco/Monaco.ttf
-      weight: normal
-      style: normal
-    codefont:
-      fontfamily: "Monaco"
-      name: "Monaco"
-      url: https://cdn.jsdelivr.net/gh/volantis-x/cdn-fonts/Monaco/Monaco.ttf
-      weight: normal
-      style: normal
+    # bodyfont:
+    #   fontfamily: "sxls"
+    #   name: "sxls"
+    #   url: https://cdn.jsdelivr.net/gh/conjuringwxq/cdn-fonts@0.0.2/sxls.otf
+    #   weight: normal
+    #   style: normal
+    # codefont:
+    #   fontfamily: "Monaco"
+    #   name: "Monaco"
+    #   url: https://cdn.jsdelivr.net/gh/conjuringwxq/cdn-fonts@0.0.2/Monaco.ttf
+    #   weight: normal
+    #   style: normal
   cursor:
     enable: true
     text: https://cdn.jsdelivr.net/gh/inkss/common@master/cursor/text.png
