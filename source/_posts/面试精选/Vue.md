@@ -107,9 +107,15 @@ keep-alive 可以实现组件缓存，当组件切换时不会对当前组件进
 
 常用的两个属性 include/exclude，允许组件有条件的进行缓存。
 
-两个生命周期 activated/deactivated，用来得知当前组件是否处于活跃状态。
+两个生命周期 activated(命中缓存时调用)/deactivated(切换时调用)，用来得知当前组件是否处于活跃状态。
 
 keep-alive 的中还运用了 LRU(Least Recently Used)算法。
+
+## Vue 的 computed 和 watch 的差异
+
+computed: 计算一个新属性，挂载到实例上(当依赖发生变化后才会重新计算)。
+
+watch: 监听已经被挂载到实例上的数据，数据发生变化了就会调用。
 
 ## Vue 生命周期调用顺序
 
