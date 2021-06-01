@@ -4,6 +4,27 @@ date: 2021-05-23
 categories: [面试, Vue]
 ---
 
+## 为什么 Vue 使用异步渲染
+
+vue 是组件级更新，如果不采用异步更新，那么每次更新数据都会对当前组件重新渲染，为了性能考虑，vue 会在本轮数据更新后，再去异步更新视图
+
+## vue diff 算法
+
+1. 先同级比较，再比较儿子节点
+2. 先判断一方有儿子一方没儿子的情况
+3. 比较都有儿子的情况
+4. 递归比较子节点
+
+> vue3 中做了优化，只比较动态节点，略过静态节点，极大的提高了效率，主要是通过双指针去确定位置
+
+## Vue 中 key 的作用
+
+如果不使用 key，Vue 会使用一种最大限度减少动态元素并且尽可能的尝试就地修改/复用相同类型元素的算法。key 是为 Vue 中 vnode 的唯一标记，通过这个 key，我们的 diff 操作可以更准确、更快速
+
+更准确：因为带 key 就不是就地复用了，在 sameNode 函数 a.key === b.key 对比中可以避免就地复用的情况。所以会更加准确。
+
+更快速：利用 key 的唯一性生成 map 对象来获取对应节点，比遍历方式更快
+
 ## Vue 响应式数据原理
 
 - 整体思路: 数据劫持 + 观察者模式(发布-订阅者模式)
@@ -17,14 +38,6 @@ categories: [面试, Vue]
 2. complile 解析模版指令，将模版中的变量替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据发生变动，收到通知后更新视图
 3. 待变动属性 dep.notice() 通知时，能调用自身的 update() 方法，并触发 Compile 中绑定的回调，则功成身退
 4. MVVM 作为数据绑定的入口，整合 Observer、Compile 和 Watcher 三者，通过 Observer 来监听自己的 model 数据变化，通过 Compile 来解析编译模版指令，最终利用 Watcher 搭建起 Observer 和 Compile 之间的通信桥梁，达到数据变化 -> 视图更新；视图交互变化 -> 数据 model 变更的双向绑定的效果
-
-## Vue 中 key 的作用
-
-如果不使用 key，Vue 会使用一种最大限度减少动态元素并且尽可能的尝试就地修改/复用相同类型元素的算法。key 是为 Vue 中 vnode 的唯一标记，通过这个 key，我们的 diff 操作可以更准确、更快速
-
-更准确：因为带 key 就不是就地复用了，在 sameNode 函数 a.key === b.key 对比中可以避免就地复用的情况。所以会更加准确。
-
-更快速：利用 key 的唯一性生成 map 对象来获取对应节点，比遍历方式更快
 
 ## Vue 事件绑定原理
 
@@ -73,6 +86,19 @@ on、emit 是基于发布订阅模式的, 维护一个事件中心, on 的时候
 7. beforeDestroy: 在当前阶段实例完全可以被使用，我们可以在这时进行善后收尾工作，比如清除计时器。
 8. destroyed: 这个时候只剩下了 dom 空壳。组件已被拆解，数据绑定被卸除，监听被移出，子实例也统统被销毁。
 
+## vue 父子组件生命周期调用顺序
+
+- 加载渲染过程
+  父 beforeCreate => 父 created => 父 beforeMount => 子 beforeCreate => 子 created => 子 beforeMount => 子 mounted => 父 mounted
+- 子组件更新流程
+  父 beforeUpdate => 子 beforeUpdate => 子 updated => 父 updated
+- 父组件更新流程
+  父 beforeUpdate => 父 updated
+- 销毁过程
+  父 beforeDestory => 子 beforeDestory => 子 destoryed => 父 destoryed
+
+> 理解: 组件调用顺序都是先父后子，渲染完成的顺序是先子后父，组件销毁的操作是先父后子，销毁完成的顺序是先子后父
+
 ## Vue 组件中的 data 为什么是函数
 
 一个组件被复用多次的话，也就会创建多个实例。本质上，这些实例用的都是同一个构造函数。如果 data 是对象的话，对象属于引用类型，会影响到所有的实例。所以为了保证组件不同的实例之间 data 不冲突，data 必须是一个函数。
@@ -110,6 +136,10 @@ keep-alive 可以实现组件缓存，当组件切换时不会对当前组件进
 两个生命周期 activated(命中缓存时调用)/deactivated(切换时调用)，用来得知当前组件是否处于活跃状态。
 
 keep-alive 的中还运用了 LRU(Least Recently Used)算法。
+
+## nextTick 实现原理
+
+nextTick 主要是使用了宏任务和微任务，定义了一个异步方法，多次调用 nextTick 会将方法存入队列中，通过这个异步方法清空当前队列，所以 nextTick 就是异步方法。
 
 ## Vue 的 computed 和 watch 的差异
 
@@ -149,6 +179,8 @@ SSR 有着更好的 SEO、并且首屏加载速度更快等优点。不过它也
 ### SEO 优化
 
 - 服务端 SSR / 服务端预渲染
+
+> 服务端渲染优先渲染出某一部分重要的内容，让其他内容懒加载，这样到达浏览器端时一部分 html 已经存在，页面上就可以呈现出一定的内容。其中服务端渲染出的 html 最好不要超过 14kb，主要是因为 tcp 慢开始的规则让第一个 tcp 包的大小是 14kb，这是与网站交互会接受到的第一个包。
 
 ### 打包优化
 
@@ -275,4 +307,8 @@ const ownSymbols = Object.getOwnPropertySymbols(proxy); // [Symbol(foo), Symbol(
 const ownKeys = Reflect.ownKeys(proxy); // ['a', 'c', Symbol(foo), 'b', Symbol(bar)]
 ```
 
-## 
+## Vue.use 做了什么
+
+1. 检查插件是否注册，若已注册，则直接跳出
+2. 处理入参，将第一个参数之后的参数收集，并将首部塞入 this 上下文
+3. 执行注册方法，调用定义好的 install 方法，传入处理的参数，若没有 install 方法并且插件本身为 function 则直接进行注册
