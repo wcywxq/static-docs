@@ -13,46 +13,6 @@ categories: [面试, JS]
 5. 元素选择器、关系选择器、伪元素选择器
 6. 通配符 \*
 
-## let/const
-
-1. 声明的变量只在声明时的代码块内有效
-2. 不存在变量的提升
-3. 暂时性死区(在变量声明前使用会发生报错)
-4. 不能够重复声明
-
-## weakMap/weakSet
-
-对于 weakMap 和 weakSet 来说不会计入垃圾回收
-
-weakMap 的键名只能是对象
-
-weakSet 成员只能是对象
-
-## 什么是 JavaScript 事件循环
-
-- 因为 js 是单线程执行的，在代码执行的过程中，通过将不同函数的执行上下文压入执行栈中来保证代码的有序执行。
-- 在执行同步代码的时候，如果遇到了异步事件，js 引擎并不会一直等待其返回结果，而是会将这个事件暂时挂起，继续执行执行栈中的其他任务。
-- 当异步事件执行完毕后，再将异步事件对应的回调加入到与当前执行栈中不同的另一个任务队列中等待执行。
-- 任务队列分为
-  - 宏任务队列
-    > script 脚本的执行
-    > setTimeout/setInterval/setImmediate
-    > I/O 操作
-    > UI 渲染
-  - 微任务队列
-    > promise 的回调
-    > node 中的 process.nextTick
-    > 对 DOM 变化监听的 MutationObserver
-- 当当前执行栈中的事件执行完毕后，js 引擎会首先判断微任务队列中是否有任务可以执行。如果有就将微任务队列的队首事件压入执行栈中执行。当微任务队列中的任务都执行完成后，再去判断宏任务队列中的任务。
-
-## 什么是事件队列
-
-事件队列是一个存储着待执行任务的队列，其中的任务严格按照事件顺序执行，队头的任务率先执行，队尾的任务后执行。每次仅执行一个任务。
-
-## 执行栈是什么
-
-执行栈是类似函数调用栈的运行容器，执行栈为空，js 引擎检查事件队列是否为空，不为空则将第一个任务压入执行栈执行。
-
 ## js 原型
 
 - 在 js 中，我们使用构造函数新建一个对象，每个构造函数内部都有一个 prototype 属性值，该属性值是一个对象，该对象包含了可以被该构造函数的所有实例所共享的属性和方法。
@@ -118,16 +78,22 @@ javascript 对象使用过引用来传递的，我们创建的每个新对象实
 - 再是对目标事件的处理
 - 最后是事件冒泡
 
-## js 闭包
+## var、let、const 对比
 
-闭包指的是有权访问另一个函数作用域中变量的函数，创建闭包最常见的方式就是在一个函数内创建另一个函数(本质就是函数的作用域链中保存着外部函数变量对象的引用)
+- var 定义的变量会进行变量提升; let 和 const 定义的变量不存在变量提升(不存在变量提升)
+  - 对于 var 来说，如果变量定义在函数内部，则会将变量提升到函数的开头
+  - 对于 var 来说，如果变量声明是一个全局变量，则会将变量声明提升到全局作用域的开头
+- var 的作用域是函数级; let 和 const 的作用域是块级(声明的变量只在声明的代码块内有效)
+- var 和 let 声明变量时不需要初始值; const 声明变量需要初始值
+- let 声明的变量存在暂时性死区(只要块级作用域内部存在 let 命令，它所声明的变量就会绑定这个区域，不再受外部影响)
+- var 定义的变量可以重复进行定义; let 和 const 声明的变量不可以重复进行定义(不能够重复声明)
 
-## 实现 new 关键字
+## 实现 new 关键字 (new 的过程/new 操作符做了什么)
 
 - 创建一个新的空对象
 - 设置原型，将对象的原型设置为函数的 prototype 对象
 - 让函数的 this 指向这个对象，执行构造函数中的代码
-- 判断函数返回值类型，值类型 => 创建对象，引用类型 => 引用类型对象
+- 判断函数返回值类型，值类型 => 创建对象，引用类型 => 引用类型对象 (返回新对象)
 
 ```js
 function ObjectFactory() {
@@ -140,6 +106,130 @@ function ObjectFactory() {
   let flag = (result && typeof result !== "object") || typeof result === "function";
   return flag ? result : newObject;
 }
+```
+
+## this 指向
+
+- 全局作用域下的 this => window
+- 普通函数 => 非严格模式 window; 严格模式 undefined
+- 箭头函数 => 指向外层的 this
+- 对象内部函数 => 当前对象
+- 构造函数 => 指向当前构造函数创建的对象实例
+- call/apply/bind => 通过设置第一个参数上下文来改变 this 指向
+
+## 实现 call、apply、bind
+
+### call
+
+```js
+Function.prototype.call2 = function (ctx, ...args) {
+  let context = ctx || window;
+  context.fn = this;
+  let result = context.fn(args);
+  delete context.fn;
+  return result;
+};
+```
+
+### apply
+
+```js
+Function.prototype.apply2 = function (ctx, ...args) {
+  let context = ctx || window;
+  context.fn = this;
+  if (!args[0].length) return context.fn();
+  let result = context.fn(...args[0]);
+  delete context.fn;
+  return result;
+};
+```
+
+### bind
+
+```js
+Function.prototype.bind2 = function (ctx, ...args) {
+  let _self = this;
+  function Fn() {}
+  let f = function (...fArgs) {
+    return _self.apply(this instanceof Fn ? this : ctx, args.concat(fArgs));
+  };
+  Fn.prototype = this.prototype;
+  f.prototype = new Fn();
+  return f;
+};
+```
+
+## js 闭包
+
+闭包指的是有权访问另一个函数作用域中变量的函数，创建闭包最常见的方式就是在一个函数内创建另一个函数(本质就是函数的作用域链中保存着外部函数变量对象的引用)
+
+## weakMap/weakSet
+
+对于 weakMap 和 weakSet 来说不会计入垃圾回收
+
+weakMap 的键名只能是对象
+
+weakSet 成员只能是对象
+
+## 什么是 JavaScript 事件循环
+
+- 因为 js 是单线程执行的，在代码执行的过程中，通过将不同函数的执行上下文压入执行栈中来保证代码的有序执行。
+- 在执行同步代码的时候，如果遇到了异步事件，js 引擎并不会一直等待其返回结果，而是会将这个事件暂时挂起，继续执行执行栈中的其他任务。
+- 当异步事件执行完毕后，再将异步事件对应的回调加入到与当前执行栈中不同的另一个任务队列中等待执行。
+- 任务队列分为
+  - 宏任务队列
+    > script 脚本的执行
+    > setTimeout/setInterval/setImmediate
+    > I/O 操作
+    > UI 渲染
+  - 微任务队列
+    > promise 的回调
+    > node 中的 process.nextTick
+    > 对 DOM 变化监听的 MutationObserver
+- 当当前执行栈中的事件执行完毕后，js 引擎会首先判断微任务队列中是否有任务可以执行。如果有就将微任务队列的队首事件压入执行栈中执行。当微任务队列中的任务都执行完成后，再去判断宏任务队列中的任务。
+
+## 什么是事件队列
+
+事件队列是一个存储着待执行任务的队列，其中的任务严格按照事件顺序执行，队头的任务率先执行，队尾的任务后执行。每次仅执行一个任务。
+
+## 执行栈是什么
+
+执行栈是类似函数调用栈的运行容器，执行栈为空，js 引擎检查事件队列是否为空，不为空则将第一个任务压入执行栈执行。
+
+## js 判断数据类型
+
+### 准确判断数据类型
+
+```js
+Object.prototype.toString.call(1); // ["object Number"]
+Object.prototype.toString.call("1"); // ["object String"]
+Object.prototype.toString.call(false); // ["object Boolean"]
+Object.prototype.toString.call(undefined); // ["object Undefined"]
+Object.prototype.toString.call(null); // ["object Null"]
+Object.prototype.toString.call([1, 2, 3]); // ["object Array"]
+Object.prototype.toString.call({}}); // ["object Object"]
+Object.prototype.toString.call(NaN); // ["object Number"]
+```
+
+### 利用 typeof 判断基本数据类型
+
+```js
+typeof 1; // "number"
+typeof "1"; // "string"
+typeof false; // boolean
+typeof undefined; // undefined
+```
+
+### 利用 instanceof 判断引用数据类型
+
+```js
+[1, 2, 3] instanceof Array; // true
+{} instanceof Object; // true
+function() {} instanceof Function; // true
+
+'1' instanceof String; // false
+1 instanceof Number; // false
+false instanceof Boolean; // false
 ```
 
 ## ajax 理解
