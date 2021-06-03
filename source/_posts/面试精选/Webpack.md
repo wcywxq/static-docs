@@ -118,7 +118,7 @@ Compilation 模块会被 Compiler 用来创建新的 compilation 对象(或新�
 - webpack-bar: 自定义 webpack bar
 - html-webpack-plugin: 可根据模版自动生成 html 代码, 并自动引用 css 和 js 文件
 - mini-css-extract-plugin: 用于分割 css chunk 包
-- optimize-css-assets-webpack-plugin/css-minimizer-webpack-plugin: 用于压缩 css 代码, 同时可对不同组件中重复的 css 代码去重
+- optimize-css-assets-webpack-plugin(webpack5+不适用)/css-minimizer-webpack-plugin(webpack5+适用): 用于压缩 css 代码, 同时可对不同组件中重复的 css 代码去重
 - uglifyjs-webpack-plugin/terser-webpack-plugin: 压缩 JavaScript
 - clean-webpack-plugin: 目录清理
 - webpack-bundle-analyze: 可视化分析包大小体积
