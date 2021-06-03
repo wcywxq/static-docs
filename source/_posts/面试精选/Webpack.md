@@ -129,6 +129,7 @@ Compilation 模块会被 Compiler 用来创建新的 compilation 对象(或新�
 - DllPlugin: 拆分捆绑包以大幅缩短构建时间, 用于抽离第三方模块，常用于对静态不变的第三方库进行处理
 - SplitChunksPlugin: 自动拆分 chunks, 公共资源拆分
 - SourceMapDevToolPlugin: 对 sourceMap 的更精细的配置
+- webpack-bundle-analyzer: 包大小分析
 
 ### webpack plugin 执行顺序
 
