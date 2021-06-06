@@ -94,19 +94,16 @@ javascript 对象使用过引用来传递的，我们创建的每个新对象实
 
 - 创建一个新的空对象
 - 设置原型，将对象的原型设置为函数的 prototype 对象
-- 让函数的 this 指向这个对象，执行构造函数中的代码
-- 判断函数返回值类型，值类型 => 创建对象，引用类型 => 引用类型对象 (返回新对象)
+- 绑定 this 指向，执行构造函数
+- 返回新对象
 
 ```js
 function ObjectFactory() {
-  let newObject = null;
+  let obj = {};
   let constructor = Array.prototype.shift.call(arguments);
-  let result = null;
-  if (typeof constructor !== "function") return;
-  newObject = Object.create(constructor.prototype);
-  result = constructor.apply(newObject, arguments);
-  let flag = (result && typeof result !== "object") || typeof result === "function";
-  return flag ? result : newObject;
+  obj.__proto__ = constructor.prototype;
+  constructor.apply(obj, arguments);
+  return obj;
 }
 ```
 
