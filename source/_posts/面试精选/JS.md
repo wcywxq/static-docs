@@ -464,3 +464,75 @@ http 是铭文传输，即未被加密
 1. commonjs 默认采用的是非严格模式
 2. es6 module 自动采用严格模式
 3. commonjs 模块输出的是一个值的拷贝，es6 module 输出的是值的引用
+
+## Promise 的一些考点
+
+### Promise.all
+
+- 一些特性
+
+Promise.all 可接受参数可以为常量，也可以为 promise 对象
+
+Promise.all 执行过程中一旦某个 promise 报错，将直接抛出异常，但同时其余的 prommise 也被执行了，因为 promise 实例在创建之初就被执行了
+
+- 实现 Promise.all
+
+```js
+function PromiseAll(promiseArray) {
+  return new Promise((resolve, reject) => {
+    if (!Array.isArray(promiseArray)) {
+      return reject(new Error("传入的参数必须是数组!"));
+    }
+    const res = [];
+    const len = promiseArray.length;
+    let index = 0;
+    for (let i = 0; i < len; i++) {
+      Promise.resolve(promiseArray[i])
+        .then(val => {
+          index++;
+          res[i] = value;
+          if (index === len) {
+            resolve(res);
+          }
+        })
+        .catch(err => {
+          reject(err);
+        });
+    }
+  });
+}
+```
+
+### Promise 缓存
+
+> 为了解决 promise 调用常量，每个页面都会调用这个常量，以解决多次调用接口对服务器造成请求的浪费。
+> 可以使用 promise 缓存或者全局状态管理。
+
+```js
+const cacheMap = new Map();
+
+function enableCache(target, name, descriptor) {
+  const val = descriptor.value;
+  descriptor.value = async function (...args) {
+    const cacheKey = name + JSON.stringify(args);
+    if (!cacheMap.get(cacheKey)) {
+      const cacheValue = Promise.resolve(val.apply(this, args)).catch(_ => {
+        cacheMap.set(cacheKey, null);
+      });
+      cacheMap.set(cacheKey, cacheValue);
+    }
+    return cacheMap.get(cacheKey);
+  };
+  return desciptor;
+}
+
+class PromiseClass {
+  @enableCache
+  static async getInfo() {}
+}
+
+PromiseClass.getInfo();
+PromiseClass.getInfo();
+PromiseClass.getInfo();
+PromiseClass.getInfo();
+```
