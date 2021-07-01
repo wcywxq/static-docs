@@ -469,7 +469,7 @@ function PromiseAll(promiseArray) {
       Promise.resolve(promiseArray[i])
         .then(val => {
           index++;
-          res[i] = value;
+          res[i] = val;
           if (index === len) {
             resolve(res);
           }
