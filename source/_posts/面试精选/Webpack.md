@@ -194,7 +194,47 @@ HMR 的核心是客户端从服务器拉取更新后的文件, 准确说就是 c
 
 ## 前端性能优化
 
-### 工程化方向
+> 做性能优化的目的，如哪项指标影响了业务，那个指标是关键
+
+> 常见的性能优化的点:
+>
+> 1. 首屏渲染时间
+> 2. 首次可交互时间 (手机号验证码)
+> 3. 首次有意义内容渲染时间 (具体的主要元素的渲染时间)
+
+> [页面性能检测工具](https://developers.google.com/speed/pagespeed/insights)
+
+### 根据类型
+
+#### 只请求当前需要的资源
+
+- 路由的异步加载
+- 图片的懒加载
+- babel 的 polyfill (低版本下对高版本语法的补充), [利用 CDN 加载 polyfill 服务](https://polyfill.io/v3/url-builder), 可以实现对 polyfill 的按需加载
+
+#### 缩减资源体积
+
+- 打包压缩
+- gzip(一种压缩算法)
+- 图片格式的优化，[压缩](https://tinypng.com), 根据屏幕分辨率展示不同分辨率的图片, webp 图片格式
+- 在 request header 中尽量控制 cookie 大小
+
+#### 时序优化
+
+- 对于没有相互关联, 没有依赖关系的请求, 采用 Promise.all 并行请求
+- ssr (在服务端打包, 可以做缓存)
+- prefetch、prerender、preload
+  - dns 预解析(`<link rel="dns-prefetch" href="xxx1.com" />`)
+  - 预连接 (`<link rel="preconnect" href="xxx1.com" />`)
+  - 预加载 (`<link rel="preload" as="image" href="https://xxx/a.png" />`)
+
+#### 合理利用缓存
+
+- CDN (CDN 预热, CDN 刷新)
+
+### 根据优化方向
+
+#### 工程化方向
 
 1. 客户端使用 gizp 离线包, 服务端开启 gzip 压缩
 2. 使用 Tree-shaking 去除未使用代码
@@ -213,7 +253,7 @@ HMR 的核心是客户端从服务器拉取更新后的文件, 准确说就是 c
 12. 启用 http2
 13. 使用负载均衡(可提高响应速度)
 
-### 细节方向
+#### 细节方向
 
 1. 图片占位, 雪碧图
 2. 预加载
