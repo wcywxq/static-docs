@@ -34,7 +34,32 @@ Proxy 不能用 Object.defineProperty 模拟
 - gulp: 基于流,找到一个(或一类)文件, 对其做一系列链式操作,更新流上的数据。整条链式操作构成一个任务，多个任务就构成了整个 web 的构建流程。
 - roolup: 适用于基础库打包。
 
-## webpack 的构建流程
+## webpack 中 chunk 和 bundle 的区别是什么
+
+> chunk 是过程，bundle 是结果，chunk 在构建完成时呈现为 bundle
+
+- chunk
+
+chunk 是 webpack 打包过程中 Modules 的集合，是(**打包过程中**)的概念
+
+webpack 的打包是从一个入口模块开始，入口模块引用其他模块，其他模块引用其他模块......
+webpack 通过引用关系诸葛打包模块，这些 module 就形成了一个 chunk
+
+如果有多个入口模块，可能会产生多个打包路径，每条路径都会形成 chunk
+
+- bundle
+
+是我们最终输出的一个或多个打包好的文件
+
+- chunk 和 bundle 的区别(关系)是什么
+
+大多数情况下，一个 chunk 会生产一个 bundle, 但也有例外。如果加了 sourceMap，一个 entry，一个 chunk 对应两个 bundle。
+
+- split chunk
+
+做代码分割，可以通过配置增加
+
+## webpack 的构建流程(打包流程)
 
 Webpack 的运行流程是一个串行的流程，从启动到结束会依次执行以下流程：
 
@@ -107,11 +132,15 @@ webpack 插件是一个具有 apply 属性的 JavaScript 对象。apply 属性�
 
 - compiler 实例
 
-Compiler 模块是 webpack 的支柱引擎，它通过 cli 或 node api 传递的所有选项，创建出一个 compilation 实例。它扩展 (extend) 自 Tapable 类，以便注册和调用插件。
+包含了 webpack 环境的所有配置信息，包含 options, loaders, plugins, 在 webpack 启动时实例化，也可理解为 webpack 的实例
+
+> Compiler 模块是 webpack 的支柱引擎，它通过 cli 或 node api 传递的所有选项，创建出一个 compilation 实例。它扩展 (extend) 自 Tapable 类，以便注册和调用插件。
 
 - compilation 钩子
 
-Compilation 模块会被 Compiler 用来创建新的 compilation 对象(或新的 build 对象)。compilation 实例能够访问所有的模块和它们的依赖(大部分是循环依赖)。它会对应用程序的依赖图中所有模块, 进行字面上的编译(literal compilation)。在编译阶段，模块会被加载(load)、封存(seal)、优化(optimize)、分块(chunk)、哈希(hash)和重新创建(restore)。
+包含当前模块资源，编译生成资源，webpack 在开发模式下运行的时候，每当检测到一个文件变化，就会创建一次新的 compilation
+
+> Compilation 模块会被 Compiler 用来创建新的 compilation 对象(或新的 build 对象)。compilation 实例能够访问所有的模块和它们的依赖(大部分是循环依赖)。它会对应用程序的依赖图中所有模块, 进行字面上的编译(literal compilation)。在编译阶段，模块会被加载(load)、封存(seal)、优化(optimize)、分块(chunk)、哈希(hash)和重新创建(restore)。
 
 ### webpack 常用 plugin
 
