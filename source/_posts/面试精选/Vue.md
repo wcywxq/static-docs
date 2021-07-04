@@ -36,6 +36,28 @@ Vue3.x 借鉴了 ivi 算法和 inferno 算法, 在创建 VNode 时就确定其�
 
 ## Vue 响应式数据原理
 
+### 阐述
+
+首先了解 Vue 中的三个核心类:
+
+1. Observer: 给对象的属性添加 getter 和 setter, 用于 **依赖收集** 和 **派发更新**
+2. Dep: 用于收集当前响应式对象的依赖关系，每个响应式对象都有一个 dep 实例，dep.subs = watcher[], 当数据发生变更的时候，会通过 dep.notify() 通知各个 watcher
+3. Watcher: 观察者对象，render watcher, computed watcher, user watcher
+
+- 依赖收集
+
+1. initState 初始化时，对计算属性初始化时，会触发 computed watcher 依赖收集
+2. initState 初始化时，对监听属性初始化的时，触发 user watcher 依赖收集
+3. render 渲染时，触发 render watcher 依赖收集
+
+- 派发更新
+
+1. 组件中对响应的数据进行修改，会触发 setter 逻辑 (Object.defineProperty)
+2. 当数据发生变更的时候, 会通过 dep.notify 通知各个 watcher
+3. 遍历所有的 subs, 调用每一个 watcher 的 update 方法
+
+### 总结原理
+
 - 整体思路: 数据劫持 + 观察者模式(发布-订阅者模式)
 - 通过 Object.defineProperty(Proxy) 来劫持各个属性的 getter 和 setter
 - 当页面使用对应属性时，首先进行依赖收集(收集当前组件的 watcher)
@@ -47,6 +69,22 @@ Vue3.x 借鉴了 ivi 算法和 inferno 算法, 在创建 VNode 时就确定其�
 2. complile 解析模版指令，将模版中的变量替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据发生变动，收到通知后更新视图
 3. 待变动属性 dep.notice() 通知时，能调用自身的 update() 方法，并触发 Compile 中绑定的回调，则功成身退
 4. MVVM 作为数据绑定的入口，整合 Observer、Compile 和 Watcher 三者，通过 Observer 来监听自己的 model 数据变化，通过 Compile 来解析编译模版指令，最终利用 Watcher 搭建起 Observer 和 Compile 之间的通信桥梁，达到数据变化 -> 视图更新；视图交互变化 -> 数据 model 变更的双向绑定的效果
+
+## Vue 计算属性的实现原理
+
+computed watcher, 计算属性的监听器
+
+computed watcher 持有一个 dep 实例，通过 drity 属性标记计算属性是否需要重新求值
+
+当 computed 的依赖值改变后，就会通知订阅的 watcher 进行更新，对于 computed watcher 会将 drity 属性设置为 true，并且进行计算属性方法的调用
+
+### computed 所谓的缓存是什么
+
+计算属性是基于它的响应式依赖进行缓存的，只有依赖发生改变的时候才会重新求值
+
+### 何时会用到 computed 缓存
+
+比如计算属性方法内部操作非常耗时，遍历一个极大的数组，计算一次可能要耗时 1s
 
 ## Vue 事件绑定原理
 
@@ -74,15 +112,17 @@ on、emit 是基于发布订阅模式的, 维护一个事件中心, on 的时候
 11. 触发 DOM 更新。
 12. 调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。
 
-## 什么是 nextTick
+## Vue.nextTick 的原理(什么是 nextTick)
+
+Vue 是异步执行 dom 更新的，一旦观察到数据的变化，就会把同一个 event loop 中的观察数据变化的 watcher 推送进这个队列
 
 在下次 DOM 更新循环结束之后执行延迟回调。nextTick 主要使用了宏任务和微任务。根据执行环境分别尝试采用
 
-- Promise
-- MutationObserver
-- setImmediate
+- Promise -> MutationObserver -> setImmediate -> setTimeout
 
-如果以上都不行则采用 setTimeout
+### 什么时候用到 nextTick？
+
+在数据变化后执行某个操作，而这个操作依赖因你数据变化而变化的 dom, 这个操作就应该放到 Vue.nextTick 回调中
 
 ## Vue 生命周期
 
