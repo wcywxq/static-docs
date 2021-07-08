@@ -578,3 +578,11 @@ PromiseClass.getInfo();
 
 1. 减少不必要的全局变量
 2. 使用完数据后，及时解除引用
+
+## e.target 和 e.currentTarget 的区别
+
+- e.target 就是触发事件的标签，触发谁就是谁
+- e.currentTarget 就是绑定事件的标签，绑定哪个事件输出的就是该事件
+
+> 如果绑定的事件所在的组件没有子元素，那么 e.target === e.currentTarget
+> 如果事件绑定在父元素中，且该父元素有子元素。当用 e.currentTarget 时，不管点击父元素所在区域还是子元素(当前事件)，都正确执行；若用 e.target 时，点击父元素所在区域无错，点击子元素区域，执行报错。报错的原因是事件没绑定在子元素上，是在父元素上，子元素要用 e.currentTarget 才正确
