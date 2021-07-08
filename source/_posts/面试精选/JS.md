@@ -309,12 +309,20 @@ ajax 是一种异步通信方式，直接由 js 脚本向服务器发起 http �
 
 ### 浏览器缓存策略
 
-### 强缓存
+#### 强缓存
+
+- 介绍
 
 强缓存可以通过设置两种 Http 头来实现，分别是 expries 和 cache-control。强缓存表示在缓存期间不需要发起请求，其 http 状态码为 200。
 
 > expries 是 HTTP/1 的产物，表示资源会在设置的时间后过期，需要再次发起请求，因为 expries 受限于本地时间，如果修改了本地时间，可能会造成缓存失效。
 > cache-control 出现于 HTTP/1.1，优先级高于 expries，该属性值表示资源会在 max-age 后贵气，过期后需再次发起请求。
+
+- no-cache 和 no-store
+
+> Cache-Control: no-cache 可以在本地进行缓存，但每次请求时，都要向服务器进行验证，如果服务器允许，才能够使用本地缓存。
+
+> Cache-Control: no-store 这个才是响应缓存不被缓存的意思
 
 #### 协商缓存
 
