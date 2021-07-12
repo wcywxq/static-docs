@@ -1,6 +1,6 @@
 ---
-title: JS 面试精选 
-date: 2021-04-19 
+title: JS 面试精选
+date: 2021-04-19
 categories: [面试, JS]
 ---
 
@@ -297,15 +297,8 @@ typeof undefined; // undefined
 
 ```js
 [1, 2, 3] instanceof Array; // true
-{
-}
-instanceof
-Object; // true
-function () {
-}
-
-instanceof
-Function; // true
+{} instanceof Object; // true 
+function () {} instanceof Function; // true
 
 '1' instanceof String; // false
 1 instanceof Number; // false
