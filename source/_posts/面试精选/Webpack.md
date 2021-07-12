@@ -322,6 +322,46 @@ HMR 的核心是客户端从服务器拉取更新后的文件, 准确说就是 c
    - 禁用 babel-loader 的模块依赖解析，否则 Webpack 接收到的就是转换过的 CommonJS 形式的模块，无法进行 tree-shaking
    - 去掉无用的 css 代码
 
+## Webpack 区分不同环境
+
+- `webpack.dev.js`
+
+主要是用来配置一些 HMR 相关的内容，以及 sourceMap 用于调试工作
+
+```js
+// webpack-merge 合并webpack 不同环境配置文件
+let { smart } = require('webpack-merge');
+let base = require('./webpack.base');
+
+module.exports = smart(base, {
+    mode: 'development'
+    entry: {},
+    output: {},
+    devServer: {},
+    module: {},
+    plugins: [], 
+})
+```
+
+- `webpack.prod.js`
+
+主要配置一些代码压缩等功能，精简代码，如去除无用的 console 等，对文件的分离
+
+```js
+let { smart } = require('webpack-merge');
+let base = require('./webpack.base');
+
+module.exports = smart(base, {
+    mode: 'production',
+    entry: {},
+    output: {},
+    devServer: {},
+    module: {},
+    plugins: [], 
+})
+
+```
+
 ## Babel 原理
 
 Babel 大概分为三大部分：

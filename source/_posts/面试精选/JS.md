@@ -1,8 +1,38 @@
 ---
-title: JS 面试精选
-date: 2021-04-19
-categories: [面试, JS]
+title: JS 面试精选 date: 2021-04-19 categories: [面试, JS]
 ---
+
+## 从 0 到 1 搭建项目的思考
+
+- 开发工具
+- 技术选型
+- 构建工具
+- 构建仓库
+- 依赖选择
+- 测试策略
+- 技术架构
+- 环境信息
+- 编码规则
+
+## 前端项目的性能指标
+
+- 白屏时间
+- 首屏时间
+- 用户可操作时间
+- 页面总下载时间
+
+## flex 布局
+
+可以自由操作容器中子元素的排列方式
+
+- flex-flow: 是 flex-direction 和 flex-wrap 的集合，默认属性为: row nowrap
+- align-content: 用于控制多行项目的对齐方式，如果项目只有一行则不会启作用
+- order: 默认为 0, 用于决定项目排列顺序，数值越小，项目排列越靠前
+- flex-grow: 默认 0，用于决定项目在有剩余空间的情况下是否放大，默认不放大；注意，即便设置了固定宽度，也会放大。
+- flex-shrink: 默认 1，用于决定项目在空间不足时是否缩小，默认项目都是 1，即空间不足时大家一起等比缩小；注意，即便设置了固定宽度，也会缩小。
+- flex-basics: 默认 auto，用于设置项目宽度，默认 auto 时，项目会保持默认宽度，或者以 width 为自身的宽度，但如果设置了 flex-basis，权重会比 width 属性高，因此会覆盖 width 属性。
+- flex: 默认 0 1 auto，flex 属性是 flex-grow，flex-shrink 与 flex-basis 三个属性的简写，用于定义项目放大，缩小与宽度。
+- align-self: 表示继承父容器的 align-items 属性。如果没父元素，则默认 stretch。 用于让个别项目拥有与其它项目不同的对齐方式，各值的表现与父容器 的 align-items 属性完全一致。
 
 ## css 优先级顺序
 
@@ -164,7 +194,9 @@ Function.prototype.apply2 = function (ctx, ...args) {
 ```js
 Function.prototype.bind2 = function (ctx, ...args) {
   let _self = this;
+
   function Fn() {}
+
   let f = function (...fArgs) {
     return _self.apply(this instanceof Fn ? this : ctx, args.concat(fArgs));
   };
@@ -244,7 +276,9 @@ Object.prototype.toString.call(false); // ["object Boolean"]
 Object.prototype.toString.call(undefined); // ["object Undefined"]
 Object.prototype.toString.call(null); // ["object Null"]
 Object.prototype.toString.call([1, 2, 3]); // ["object Array"]
-Object.prototype.toString.call({}}); // ["object Object"]
+Object.prototype.toString.call({}
+})
+; // ["object Object"]
 Object.prototype.toString.call(NaN); // ["object Number"]
 ```
 
@@ -261,8 +295,15 @@ typeof undefined; // undefined
 
 ```js
 [1, 2, 3] instanceof Array; // true
-{} instanceof Object; // true
-function() {} instanceof Function; // true
+{
+}
+instanceof
+Object; // true
+function () {
+}
+
+instanceof
+Function; // true
 
 '1' instanceof String; // false
 1 instanceof Number; // false
@@ -275,10 +316,90 @@ ajax 是一种异步通信方式，直接由 js 脚本向服务器发起 http �
 
 ## 浏览器缓存
 
+![缓存](/images/缓存.png)
+
 ### 什么是 Service worker
 
 是一个服务器与浏览器之间的中间人角色，如果网站中注册了 service worker，那么它可以拦截当前网站所有的请求，然后进行判断。
 如果需要向服务器发起请求，那么就转给服务器，如果可以直接使用缓存就直接返回缓存内容不再转给服务器，从而大大提高浏览体验。
+
+#### Service worker 的生命周期
+
+Service Worker 的生命周期与 web 页面完全分离。
+
+它包含以下几个阶段:
+
+- 下载
+
+这是浏览器下载包含 Service worker 的 .js 文件的时候
+
+- 安装
+
+在安装过程中，通常需要缓存某些静态资产，如果某些资源已成功缓存，那么 Service worker 就安装完毕。如果任何文件下载失败或缓存失败，那么安装步骤将会失败，Service Worker 就无法激活（也就是说, 不会安装）。如果发生这种情况，不必担心，它下次会再试一次。
+
+- 激活
+
+安装成功之后，接下来就是激活步骤，通常会在这个阶段管理旧缓存。要为 web 应用程序安装 Service worker，必须先注册它，这可以在 JavaScript 代码中完成。注册 Service Worker 后，它会提示浏览器在后台启动 Service Worker 安装步骤
+
+![Service worker 生命周期](/images/service_worker.png)
+
+#### Service worker 经常配合哪种缓存使用
+
+经常配合 CacheStorage 离线缓存一起使用
+
+```js
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js");
+}
+
+// sw.js
+var VERSION = "v1";
+
+// 缓存
+self.addEventListener("install", function (event) {
+  event.waitUntil(
+    caches.open(VERSION).then(function (cache) {
+      return cache.addAll(["./start.html", "./static/jquery.min.js", "./static/mm1.jpg"]);
+    })
+  );
+});
+
+// 缓存更新
+self.addEventListener("activate", function (event) {
+  event.waitUntil(
+    caches.keys().then(function (cacheNames) {
+      return Promise.all(
+        cacheNames.map(function (cacheName) {
+          // 如果当前版本和缓存版本不一致
+          if (cacheName !== VERSION) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
+
+// 捕获请求并返回缓存数据
+self.addEventListener("fetch", function (event) {
+  event.respondWith(
+    caches
+      .match(event.request)
+      .catch(function () {
+        return fetch(event.request);
+      })
+      .then(function (response) {
+        caches.open(VERSION).then(function (cache) {
+          cache.put(event.request, response);
+        });
+        return response.clone();
+      })
+      .catch(function () {
+        return caches.match("./static/mm1.jpg");
+      })
+  );
+});
+```
 
 ### 浏览器缓存机制
 
@@ -400,7 +521,8 @@ get 类似于查找，可用缓存；post 必须与数据库进行交互，不�
 
 ### webSocket
 
-webSocket 是一种在单个 TCP 连接上进行全双工通信的协议，webSocket 是基于应用层传输控制协议，它们都是全双工的，区别于普通的 http 请求，发起 webScoket 请求时，会增加一个请求头，用来告诉服务器这是 webSocket 请求
+webSocket 是一种在单个 TCP 连接上进行全双工通信的协议，webSocket 是基于应用层传输控制协议，它们都是全双工的，区别于普通的 http 请求，发起 webScoket 请求时，会增加一个请求头，用来告诉服务器这是
+webSocket 请求
 
 ### http 三次握手
 
