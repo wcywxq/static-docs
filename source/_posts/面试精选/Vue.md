@@ -25,6 +25,17 @@ Vue3.x 借鉴了 ivi 算法和 inferno 算法, 在创建 VNode 时就确定其�
 该算法中还运用了动态规划的思想求解最长递归子序列。
 
 > vue3 中做了优化，只比较动态节点，略过静态节点，极大的提高了效率，主要是通过双指针去确定位置
+> vue3 新增了静态标记(patch flag)与上次虚拟节点对比，只会对比带有 patch flag 的节点
+
+## Vue3 所做的一些优化
+
+1. diff 算法优化
+2. 按需编译代码，体积缩小
+3. composition api (类似 react hooks)
+4. 对 ts 的支持更好
+5. 暴露了一些自定义渲染的 api
+6. 更先进的组件 (telport)
+7. Fragement
 
 ## Vue 中 key 的作用
 
