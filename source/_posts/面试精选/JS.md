@@ -297,7 +297,7 @@ typeof undefined; // undefined
 
 ```js
 [1, 2, 3] instanceof Array; // true
-{} instanceof Object; // true 
+{} instanceof Object; // true
 function () {} instanceof Function; // true
 
 '1' instanceof String; // false
@@ -703,3 +703,169 @@ PromiseClass.getInfo();
 
 > 如果绑定的事件所在的组件没有子元素，那么 e.target === e.currentTarget
 > 如果事件绑定在父元素中，且该父元素有子元素。当用 e.currentTarget 时，不管点击父元素所在区域还是子元素(当前事件)，都正确执行；若用 e.target 时，点击父元素所在区域无错，点击子元素区域，执行报错。报错的原因是事件没绑定在子元素上，是在父元素上，子元素要用 e.currentTarget 才正确
+
+## Generator
+
+### Generator 函数 - 生成器
+
+Generator 是 ES6 标准引入的新的数据类型，Generator 可以理解为一个状态机，内部封装了很多状态，同时返回一个迭代器 Iterator 对象。可以通过这个迭代器遍历相关的值及状态。Generator 的显著特点是可以多次返回，每次的返回值作为迭代器的一部分保存下来，可以被我们显示调用。
+
+### Generator 函数的声明
+
+一般的函数使用 function 声明，return 作为回调，只可以回调一次。而 Generator 函数使用 function\* 定义，除了 return，还可以使用 yield 返回多次
+
+```js
+function* foo(x) {
+  yield x + 1;
+  yield x + 2;
+  return x + 3;
+}
+const result = foo(0); // foo {<suspended>}
+result.next(); // {value: 1, done: false}
+result.next(); // {value: 2, done: false}
+result.next(); // {value: 3, done: true}
+result.next(); // {value: undefined, done: true}
+```
+
+> 在上面的例子中，可以看到，在执行 foo 函数后返回了一个 Generator 函数的实例。它具有 suspended 和 closed, suspended 代表暂停，closed 则为结束，但是这个状态是无法补货的，我们只能通过 Generator 函数提供的方法获取当前的状态。在执行 next 方法后，顺序执行了 yield 的返回值。返回值有 value 和 done 两个状态。value 为返回值，可以是任意类型。done 的状态为 ture/false, true 即为执行完毕。在执行完毕后再次调用返回 `{ value:undefined, done: true }`
+
+> 注意: 在遇到 return 的时候，所有剩下的 yield 不再执行，直接返回 `{ value: undefined, done: true }`
+
+### Generator 函数的方法
+
+Generator 函数提供了 3 个方法: next / return / throw
+
+- next: 按步执行，每次返回一个只，同时也可以每次传入新的值作为计算
+- return: 直接跳过所有步骤，直接返回 `{ value: undefined, done: true }`
+- throw: 根据函数中书写 try catch 返回 catch 中的内容，如果没有写 try, 则直接抛出异常
+
+### Generator 的遍历
+
+Generator 函数的返回值是一个带有状态的 Generator 实例。它可以被 for of 调用，进行遍历，并且只能被 for ... of 调用。
+
+```js
+function* foo(x) {
+  console.log("start");
+  yield x + 1;
+  console.log("state 1");
+  yield x + 2;
+  console.log("end);
+}
+
+const result = foo(0); // foo {<suspended>}
+
+for (let i of result) {
+  console.log(i);
+}
+
+// start
+// 1
+// state 1
+// 2
+// end
+result.next() // { value: undefined, done: true }
+```
+
+> 调用 for ... of 方法后，在后台调用 next(), 当 done 属性为 true 的时候，循环退出。因此 Generator 函数的实例将顺序执行一遍，再次调用时，状态为已完成
+
+### Generator 函数状态的存储和改变
+
+Generator 函数中 yield 返回的值是可以被变量存储和改变的
+
+```js
+function* foo(x) {
+  let a = yield x + 0;
+  let b = yield a + 2;
+  yield x;
+  yield a;
+  yield b;
+}
+const result = foo(0);
+result.next(); //  {value: 0, done: false}
+result.next(2); // {value: 4, done: false}
+result.next(3); // {value: 0, done: false}
+result.next(4); // {value: 2, done: false}
+result.next(5); // {value: 3, done: false}
+```
+
+> 以上的执行结果中，我们可以看到，在第二步的时候，我们传入 2 这个参数，foo 函数中的 a 的变量的值 0 被替换为 2，并且在第 4 次迭代的时候，返回的是 2。而第三次迭代的时候，传入的 3 参数，替换了 b 的值 4，并在第 5 次迭代的时候返回了 3。所以传入的参数，是替代上一次迭代的生成值。
+
+### yield\* 委托
+
+在 Generator 函数中，我们有时需要将多个迭代器的值合在一起，我们可以使用 yield \* 的形式，将执行委托给另外一个 Generator 函数
+
+```js
+function* foo1() {
+  yield 1;
+  yield 2;
+  return "foo1 end";
+}
+
+function* foo2() {
+  yield 3;
+  yield 4;
+}
+
+function* foo() {
+  yield* foo1();
+  yield* foo2();
+  yield 5;
+}
+
+const result = foo();
+
+console.log(iterator.next()); // "{ value: 1, done: false }"
+console.log(iterator.next()); // "{ value: 2, done: false }"
+console.log(iterator.next()); // "{ value: 3, done: false }"
+console.log(iterator.next()); // "{ value: 4, done: false }"
+console.log(iterator.next()); // "{ value: 5, done: false }"
+console.log(iterator.next()); // "{ value: undefined, done: true }"
+```
+
+> foo 在执行的时候，首先委托给了 foo1，等 foo1 执行完毕，再委托给 foo2。但是我们发现，”foo1 end” 这一句并没有输出。
+> 在整个 Generator 中，return 只能有一次，在委托的时候，所有的 yield*都是以函数表达式的形式出现。return 的值是表达式的结果，在委托结束之前其内部都是暂停的，等待到表达式的结果的时候，将结果直接返回给 foo。此时 foo 内部没有接收的变量，所以未打印。
+> 如果我们希望捕获这个值，可以使用 yield* foo() 的方式进行获取。
+
+## async / await 的实现
+
+理解 async 函数需要先理解 Generator 函数，因为 async 函数是 Generator 函数的语法糖
+
+### 实现一个简单的 async / await
+
+async/await 语法糖就是使用 Generator 函数+自动执行器来运作的。
+
+```js
+// 定义了一个promise，用来模拟异步请求，作用是传入参数++
+function getNum(num) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(num + 1);
+    }, 1000);
+  });
+}
+
+// 自动执行器，如果一个Generator函数没有执行完，则递归调用
+function asyncFun(func) {
+  var gen = func();
+
+  function next(data) {
+    var result = gen.next(data);
+    if (result.done) return result.value;
+    result.value.then(function (data) {
+      next(data);
+    });
+  }
+
+  next();
+}
+
+// 所需要执行的Generator函数，内部的数据在执行完成一步的promise之后，再调用下一步
+var func = function* () {
+  var f1 = yield getNum(1);
+  var f2 = yield getNum(f1);
+  console.log(f2);
+};
+asyncFun(func);
+```
+
+> 在执行的过程中，判断一个函数的 promise 是否完成，如果已经完成，将结果传入下一个函数，继续重复此步骤。
