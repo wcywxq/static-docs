@@ -282,15 +282,17 @@ custom_css:
       color: ""
   fontfamily:
     bodyfont:
-      fontfamily: "sxls"
-      name: "sxls"
-      url: https://cdn.jsdelivr.net/gh/conjuringwxq/cdn-fonts@0.0.2/sxls.otf
+      fontfamily: "Monaco"
+      name: "Monaco"
+      url: https://cdn.jsdelivr.net/gh/conjuringwxq/cdn-fonts@0.0.2/Monaco.ttf
+      # sxls
       weight: normal
       style: normal
     codefont:
-      fontfamily: "Hack"
-      name: "Hack"
-      url: https://cdn.jsdelivr.net/gh/conjuringwxq/cdn-fonts@0.0.2/Hack.ttf
+      fontfamily: "Monaco"
+      name: "Monaco"
+      url: https://cdn.jsdelivr.net/gh/conjuringwxq/cdn-fonts@0.0.2/Monaco.ttf
+      # Hack
       weight: normal
       style: normal
   cursor:
